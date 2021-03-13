@@ -1,8 +1,10 @@
-# Sign Language Detection
+# Sign Language Detection Training
 
-This is a TensorFlow implementation of the model proposed in
+This is a fork of the [TensorFlow implementation](https://github.com/google-research/google-research/tree/master/sign_language_detection) of the model proposed in
 [Real-Time Sign Language Detection using Human Pose Estimation](https://arxiv.org/abs/2008.04637),
 published in SLRTP 2020.
+
+In this fork, we add data loading and training for Holistic pose estimation.
 
 This model is used in the
 [Real-TIme Sign Language Detection for Videoconferencing](https://youtu.be/nozz2pvbG_Q)
@@ -10,8 +12,7 @@ demo published in ECCV 2020.
 
 ## Models
 
-This repository includes pre-trained models for both python ([py](models/py/))
-and javascript ([js](models/js/)) .
+This repository includes pre-trained models for both python and javascript.
 
 ![Model Card](assets/model_card.png)
 
@@ -34,21 +35,23 @@ python -m train --dataset_path="data.tfrecord" --device="/GPU:0"
 
 ## Dataset
 
-The provided models were trained on the
-[Public DGS Corpus](https://www.sign-lang.uni-hamburg.de/meinedgs/ling/start-name_en.html).
-
 The dataset is represented as a `tfrecord` file where each video has 4
-properties: 1. `fps`:`Int64List` - the framerate of the video 1.
-`pose_data`:`BytesList` - human pose estimation, as a tensor of the shape
-`(frames, 1, points, dimensions)` 1. `pose_confidence`:`BytesList` - human pose
-estimation confidence, as a tensor of the shape `(frames, 1, points)` 1.
-`is_signing`:`BytesList` - a bytes object representing weather the user was
+properties: 
+1. `fps`:`Int64List` - the framerate of the video 
+1. `pose_data`:`BytesList` - human pose estimation, as a tensor of the shape
+`(frames, 1, points, dimensions)` 
+1. `pose_confidence`:`BytesList` - human pose
+estimation confidence, as a tensor of the shape `(frames, 1, points)`0
+1. `is_signing`:`BytesList` - a bytes object representing weather the user was
 signing or not in every frame.
 
 Please see `examples/create_tfrecord.py` for an example of creating this record.
 
-In this work, we use a 50:25:25 data split. The official split used in the
-trained models can be found in the [split](split/) directory.
+The provided models were trained on the
+[Public DGS Corpus](https://www.sign-lang.uni-hamburg.de/meinedgs/ling/start-name_en.html).
+
+To create the data files using the dgs corpus, *TODO*
+
 
 ### Citations
 
