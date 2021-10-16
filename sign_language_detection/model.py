@@ -11,8 +11,7 @@ def get_model():
     model = tf.keras.Sequential(name='tgt')
 
     # model.add(SequenceMasking())  # Mask padded sequences
-    model.add(tf.keras.layers.Dropout(
-        FLAGS.input_dropout))  # Random feature dropout
+    model.add(tf.keras.layers.Dropout(FLAGS.input_dropout))  # Random feature dropout
 
     # Add LSTM
     for _ in range(FLAGS.encoder_layers):

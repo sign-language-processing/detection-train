@@ -9,8 +9,8 @@ with tf.io.TFRecordWriter('example.tfrecord') as writer:
         fps = 25  # FPS in the example video
 
         is_signing = np.random.randint(low=0, high=1, size=(frames), dtype='byte').tobytes()
-        data = tf.io.serialize_tensor(tf.random.normal(shape=(frames, 1, 137, 2), dtype=tf.float32)).numpy()
-        confidence = tf.io.serialize_tensor(tf.random.normal(shape=(frames, 1, 137), dtype=tf.float32)).numpy()
+        data = tf.io.serialize_tensor(tf.random.normal(shape=(frames, 1, 75, 3), dtype=tf.float32)).numpy()
+        confidence = tf.io.serialize_tensor(tf.random.normal(shape=(frames, 1, 75), dtype=tf.float32)).numpy()
 
         features = {
             'fps': tf.train.Feature(int64_list=tf.train.Int64List(value=[fps])),

@@ -4,12 +4,13 @@ import random
 
 import tensorflow as tf
 from absl import app
-from sign_language_detection.args import FLAGS
-from sign_language_detection.dataset import get_datasets
-from sign_language_detection.model import build_model
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.models import load_model
+
+from sign_language_detection.args import FLAGS
+from sign_language_detection.dataset import get_datasets
+from sign_language_detection.model import build_model
 
 
 def set_seed():
@@ -39,7 +40,8 @@ def main(unused_argv):
                   epochs=FLAGS.epochs,
                   steps_per_epoch=FLAGS.steps_per_epoch,
                   validation_data=dev,
-                  callbacks=[es, mc])
+                  callbacks=[es, mc]
+                  )
 
     best_model = load_model(FLAGS.model_path)
     print('Testing')

@@ -1,13 +1,28 @@
 """Utilities to load and process a sign language detection dataset."""
+import functools
+import os
 from typing import Dict
 
 import tensorflow as tf
-from pose_format.pose import Pose
+from pose_format.pose import Pose, PoseHeader
 from pose_format.tensorflow.masked.tensor import MaskedTensor
 from pose_format.tensorflow.pose_body import TensorflowPoseBody
 from pose_format.tensorflow.pose_body import TF_POSE_RECORD_DESCRIPTION
+from pose_format.utils.reader import BufferReader
 
 from sign_language_detection.args import FLAGS
+
+
+@functools.lru_cache(maxsize=1)
+def get_pose_header():
+    """Get pose header with components description."""
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    header_path = os.path.join(dir_path, "holistic.poseheader")
+    f = open(header_path, "rb")
+    reader = BufferReader(f.read())
+    header = PoseHeader.read(reader)
+    header.components.pop(1)  # Remove face from holistic pose
+    return header
 
 
 def differentiate_frames(src):
@@ -85,7 +100,7 @@ def process_datum(datum, augment=False):
     """
     masked_tensor = MaskedTensor(tensor=datum["pose_data_tensor"], mask=datum["pose_data_mask"])
     pose_body = TensorflowPoseBody(fps=datum["fps"], data=masked_tensor, confidence=datum["pose_confidence"])
-    pose = Pose(header=get_openpose_header(), body=pose_body)
+    pose = Pose(header=get_pose_header(), body=pose_body)
     tgt = datum["tgt"]
 
     fps = pose.body.fps
@@ -111,7 +126,7 @@ def prepare_io(datum):
     src = datum["src"]
     tgt = datum["tgt"]
 
-    return src, tgt
+    return src, tf.cast(tgt, dtype=tf.int32)
 
 
 def batch_dataset(dataset, batch_size):
@@ -141,7 +156,7 @@ def test_pipeline(dataset):
     dataset = dataset.map(load_datum)
     dataset = dataset.map(process_datum)
     dataset = batch_dataset(dataset, FLAGS.test_batch_size)
-    return dataset.cache()
+    return dataset
 
 
 def split_dataset(dataset):
