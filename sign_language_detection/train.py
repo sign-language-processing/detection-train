@@ -21,6 +21,15 @@ def set_seed():
 
 
 def main(unused_argv):
+    # from tensorflow.keras.models import load_model
+    # import numpy as np
+    #
+    # model = build_model()
+    # model.predict(np.zeros((1, 10, 75)))
+    # model.save("test.h5")
+    # model.summary()
+    #
+    # load_model("test.h5")
     """Keras training loop with early-stopping and model checkpoint."""
 
     set_seed()
@@ -33,15 +42,17 @@ def main(unused_argv):
 
     # Train
     es = EarlyStopping(monitor='val_accuracy', mode='max', verbose=1, patience=FLAGS.stop_patience)
-    mc = ModelCheckpoint(FLAGS.model_path, monitor='val_accuracy', mode='max', verbose=1, save_best_only=True)
+    mc = ModelCheckpoint(FLAGS.model_path, verbose=1, save_best_only=True) ## # monitor='val_loss', mode='min',
 
     with tf.device(FLAGS.device):
         model.fit(train,
                   epochs=FLAGS.epochs,
                   steps_per_epoch=FLAGS.steps_per_epoch,
-                  validation_data=dev,
+                  # validation_data=dev,
                   callbacks=[es, mc]
                   )
+
+    model.summary()
 
     best_model = load_model(FLAGS.model_path)
     print('Testing')
