@@ -55,7 +55,7 @@ To create the data files using the dgs corpus, *TODO*
 
 ### Citations
 
-```
+```bibtex
 @inproceedings{moryossef2020sign,
   title={Real-Time Sign Language Detection using Human Pose Estimation},
   author={Amit Moryossef and Ioannis Tsochantaridis and Roee Aharoni and Sarah Ebling and S. Narayanan},
