@@ -40,7 +40,7 @@ def differentiate_frames(src):
 def distance(src):
     """Calculate the Euclidean distance from x:y coordinates."""
     square = src.square()
-    sum_squares = square.sum(dim=-1).fix_nan()
+    sum_squares = square.sum(axis=-1).fix_nan()
     sqrt = sum_squares.sqrt().zero_filled()
     return sqrt
 
@@ -107,7 +107,7 @@ def process_datum(datum, augment=False):
     frames = datum["frames"]
 
     if augment:
-        pose, selected_indexes = pose.frame_dropout(FLAGS.frame_dropout_std)
+        pose, selected_indexes = pose.frame_dropout_normal(dropout_mean=0, dropout_std=FLAGS.frame_dropout_std)
         tgt = tf.gather(tgt, selected_indexes)
 
         new_frames = tf.cast(tf.size(tgt), dtype=fps.dtype)
