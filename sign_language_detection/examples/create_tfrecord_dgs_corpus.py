@@ -60,7 +60,7 @@ def load_pose(tf_pose):
 with tf.io.TFRecordWriter('data.tfrecord') as writer:
     for datum in tqdm(dgs_corpus["train"]):
         elan_path = datum["paths"]["eaf"].numpy().decode('utf-8')
-        sentences = get_elan_sentences(elan_path)
+        sentences = list(get_elan_sentences(elan_path))
 
         for person in ["a", "b"]:
             pose_data, pose_conf, fps = load_pose(datum["poses"][person])
